@@ -1,25 +1,27 @@
 import { storeToRefs } from "pinia"
-import { getPokemons } from "@/services/pokemon.service"
+import { getPokemon } from "@/services/pokemon.service"
 import { pokemonStore } from "@/stores/pokemon.store"
 import { useQuery } from "@tanstack/vue-query"
 
-const usePokemon = () => {
-  const { setPokemons } = pokemonStore()
-  const { pokemons } = storeToRefs(pokemonStore())
+const usePokemon = (id: number) => {
+  const { setPokemon } = pokemonStore()
+  const { pokemon } = storeToRefs(pokemonStore())
   
   const { isLoading, isError, data, error } = useQuery(
-    ['pokemons'],
-    () => getPokemons(),
+    ['pokemon', id],
+    () => getPokemon(id),
     {
-      onSuccess(newPokemons) {
-        setPokemons(newPokemons.results)
+      onSuccess(newPokemon) {
+        setPokemon(newPokemon)
       }
     }
   )
 
   return {
-    pokemons,
-    isLoading
+    pokemon,
+    isLoading,
+    isError,
+    error
   }
 }
 
