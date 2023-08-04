@@ -1,9 +1,7 @@
 import axios from 'axios'
 
-export default defineNuxtPlugin(nuxtApp => {
-  
-  const config = useRuntimeConfig()
-  const apiBaseUrl = config.public.apiBaseUrl
+export default defineNuxtPlugin((nuxtApp) => {
+  const apiBaseUrl = nuxtApp.$config.public.apiBaseUrl
 
   const api = axios.create({
     baseURL: apiBaseUrl

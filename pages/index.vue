@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-import usePokemons from '@/composables/usePokemons'
-const { pokemons, isLoading, isError, error } = usePokemons()
+  import usePokemons from '@/composables/usePokemons'
 
-const pokemonId = (url: string) => {
-  return url.split('/').filter(Boolean).pop()
-}
+  const { pokemons, isLoading, isError, error } = usePokemons()
+
+  const pokemonId = (url: string) => url.split('/').filter(Boolean).pop()
 
 </script>
 
 <template>
-  <h1>hola</h1>
+  <div v-if="isLoading && !pokemons" class="spinner-border mx-auto" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
 
-  <p v-if="isLoading">loading...</p>
+  <div v-if="isError" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
 
-  <p v-if="isError">{{ error }}</p>
-
-  <pre v-else v-for="pokemon in pokemons">
-    {{ pokemon }}
-    <NuxtLink :to="`/pokemon/${pokemonId(pokemon.url)}`">{{ pokemon.name }}</NuxtLink>
-  </pre>
+  <div class="d-flex flex-wrap justify-content-between gap-3">
+    <PokemonCard v-for="pokemon in pokemons" :id="pokemonId(pokemon.url)" :key="pokemon.name" :name="pokemon.name" />
+  </div>
 </template>
